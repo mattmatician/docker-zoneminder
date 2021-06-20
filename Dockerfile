@@ -107,7 +107,8 @@ RUN \
     libvlc5 \
     vlc-plugin-base \
     vlc-plugin-video-output \
-    libjwt-gnutls0
+    libjwt-gnutls0 \
+    policykit-1
 
 # Run Apache2 as abc user
 RUN \
