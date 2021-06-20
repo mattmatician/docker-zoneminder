@@ -109,11 +109,6 @@ RUN \
     vlc-plugin-video-output \
     libjwt-gnutls0
 
-# Workaround to fix CSS
-RUN \
-  ln -sf ../../../fonts /usr/share/zoneminder/www/skins/classic/css && \
-  ln -sf ../../../skins /usr/share/zoneminder/www/skins/classic/css
-
 # Run Apache2 as abc user
 RUN \
   sed -i 's/www-data/abc/g' /etc/apache2/envvars
@@ -127,6 +122,11 @@ COPY root/ /
 RUN \
   a2enmod php7.4 cgi rewrite expires headers && \
   a2enconf zoneminder
+
+# Workaround to fix CSS
+RUN \
+  ln -sf ../../../fonts /usr/share/zoneminder/www/skins/classic/css && \
+  ln -sf ../../../skins /usr/share/zoneminder/www/skins/classic/css
 
 # ports and volumes
 EXPOSE 80
