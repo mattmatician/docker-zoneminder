@@ -109,11 +109,6 @@ RUN \
     vlc-plugin-video-output \
     libjwt-gnutls0
 
-# Enable Apache2 modules and confs
-RUN \
-  a2enmod php7.4 cgi rewrite expires headers && \
-  a2enconf zoneminder
-
 # Workaround to fix CSS
 RUN \
   ln -sf ../../../fonts /usr/share/zoneminder/www/skins/classic/css && \
@@ -127,6 +122,11 @@ RUN \
 COPY --from=buildstage /tmp/zoneminder-build/ /
 COPY --from=buildstage /tmp/zoneminder/build/misc/apache.conf /etc/apache2/conf-available/zoneminder.conf
 COPY root/ /
+
+# Enable Apache2 modules and confs
+RUN \
+  a2enmod php7.4 cgi rewrite expires headers && \
+  a2enconf zoneminder
 
 # ports and volumes
 EXPOSE 80
