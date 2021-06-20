@@ -54,7 +54,7 @@ RUN \
     -DZM_FONTDIR=/usr/share/zoneminder/fonts \
     -DZM_WEB_GROUP=abc \
     -DZM_WEB_USER=abc \
-    -DZM_DB_HOST=mysql \
+    -DZM_DB_HOST=db \
     .. && \
   make && \
   make DESTDIR=/tmp/zoneminder-build install

@@ -1,5 +1,5 @@
 services:
-  mysql:
+  db:
     environment:
       MYSQL_DATABASE: zm
       MYSQL_PASSWORD: zmpass
@@ -11,6 +11,8 @@ services:
     volumes:
     - mysql_data:/var/lib/mysql:rw
   zoneminder:
+    depends_on:
+    - db
     environment:
       TZ: Europe/London
     image: mattmatician/zoneminder:latest
