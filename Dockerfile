@@ -29,11 +29,12 @@ RUN \
     libpolkit-agent-1-dev \
     libcurl4-openssl-dev \
     libvncserver-dev \
-    libvlc-dev
+    libvlc-dev \
+    libjwt-gnutls-dev
 
 RUN \
  echo "**** build zoneminder ****" && \
- git clone --depth 1 https://github.com/ZoneMinder/ZoneMinder -b 1.34.26 /tmp/zoneminder && \
+ git clone --depth 1 https://github.com/ZoneMinder/ZoneMinder -b 1.36.4 /tmp/zoneminder && \
  cd /tmp/zoneminder && \
  git submodule update --init --recursive
 
@@ -56,11 +57,6 @@ RUN \
   make && \
   make DESTDIR=/tmp/zoneminder-build install
 
-RUN \
-  mkdir -p /tmp/zoneminder/build && \
-  cd /tmp/zoneminder/build && \
-  make install
-
 ############## runtime stage ##############
 FROM ghcr.io/linuxserver/baseimage-ubuntu:focal
 
@@ -79,6 +75,7 @@ RUN \
   apt-get install -y --no-install-recommends \
     net-tools \
     apache2 \
+    mysql-client \
     php \
     libapache2-mod-php \
     php-mysql \
@@ -97,7 +94,9 @@ RUN \
     libwww-perl \
     libdbi-perl \
     libdbd-mysql-perl \
+    libdata-entropy-perl \
     libdate-manip-perl \
+    libdigest-bcrypt-perl \
     libsys-mmap-perl \
     libsys-meminfo-perl \
     libpolkit-agent-1-0 \
@@ -105,7 +104,8 @@ RUN \
     libvncserver1 \
     libvlc5 \
     vlc-plugin-base \
-    vlc-plugin-video-output
+    vlc-plugin-video-output \
+    libjwt-gnutls0
 
 # copy buildstage and local files
 COPY --from=buildstage /tmp/zoneminder-build/ /
