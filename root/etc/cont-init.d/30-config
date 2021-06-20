@@ -1,27 +1,22 @@
 #!/usr/bin/with-contenv bash
 
 # set php timezone
-PHP_TZ=${TZ:-Etc/UTC}
-sed -i "s#^[; \t]*date\.timezone.*\$#date\.timezone = ${PHP_TZ}#g" /etc/php/7.4/apache2/php.ini
+sed -i "s#^[; \t]*date\.timezone.*\$#date\.timezone = ${TZ:-Etc/UTC}#g" /etc/php/7.4/apache2/php.ini
 
 # system timezone
 ln -sf /usr/share/zoneinfo/${TZ:-Etc/UTC} /etc/localtime
 dpkg-reconfigure -f noninteractive tzdata
 
 # cleanup stale pid and sock files
-[[ -e /var/run/zoneminder/zmdc.sock || -e /var/run/zoneminder/zm.pid ]] && \
+[[ -e /var/run/zm/zmdc.sock || -e /var/run/zm/zm.pid ]] && \
 	rm -rf /var/run/zoneminder/*
 [[ -e /var/run/apache2/apache2.pid ]] && \
 	rm -rf /var/run/apache2/*
 
-chgrp -c abc /etc/zm/zm.conf
-chmod 640 /etc/zm/zm.conf
-chown abc:abc \
-	/data
-chown -R abc:abc \
-	/config \
-	/data/zoneminder
-chmod -R 777 \
-	/var/lib/apache2 \
-	/var/run/mysqld \
-	/var/run/zoneminder
+# create initial folders
+mkdir -p /app/content/events
+mkdir -p /app/log
+
+# permissions
+chown -R abc:abc /app /config
+chmod 640 /config/zm/zm.conf

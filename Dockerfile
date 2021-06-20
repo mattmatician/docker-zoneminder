@@ -47,8 +47,8 @@ RUN \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DZM_CGIDIR=/usr/lib/zoneminder/cgi-bin \
     -DZM_CONFIG_DIR=/config/zm \
-    -DZM_CONTENTDIR=/data/content \
-    -DZM_LOGDIR=/data/log \
+    -DZM_CONTENTDIR=/app/content \
+    -DZM_LOGDIR=/app/log \
     -DZM_PATH_ARP=/usr/sbin/arp \
     -DZM_WEBDIR=/usr/share/zoneminder/www \
     -DZM_FONTDIR=/usr/share/zoneminder/fonts \
@@ -109,20 +109,10 @@ RUN \
     vlc-plugin-video-output \
     libjwt-gnutls0
 
-# copy buildstage and local files
-COPY --from=buildstage /tmp/zoneminder-build/ /
-COPY --from=buildstage /tmp/zoneminder/build/misc/apache.conf /etc/apache2/conf-available/zoneminder.conf
-
+# Enable Apache2 modules and confs
 RUN \
   a2enmod php7.4 cgi rewrite expires headers && \
   a2enconf zoneminder
-
-RUN \
-  mkdir -p /data/content/events && \
-  mkdir -p /data/log && \
-  mkdir -p /config/zm && \
-  chown abc:abc -R /data && \
-  chown abc:abc -R /config
 
 # Workaround to fix CSS
 RUN \
@@ -133,9 +123,11 @@ RUN \
 RUN \
   sed -i 's/www-data/abc/g' /etc/apache2/envvars
 
-# add local files
+# copy buildstage and local files
+COPY --from=buildstage /tmp/zoneminder-build/ /
+COPY --from=buildstage /tmp/zoneminder/build/misc/apache.conf /etc/apache2/conf-available/zoneminder.conf
 COPY root/ /
 
 # ports and volumes
 EXPOSE 80
-VOLUME /config /data
+VOLUME /config /app

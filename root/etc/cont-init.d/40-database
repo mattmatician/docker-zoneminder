@@ -1,3 +1,4 @@
 #!/usr/bin/with-contenv bash
 
+# check and update db if required
 /usr/bin/zmupdate.pl -nointeractive
