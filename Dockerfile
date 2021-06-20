@@ -1,6 +1,8 @@
 FROM ghcr.io/linuxserver/baseimage-ubuntu:focal as buildstage
 ############## build stage ##############
 
+ARG ZONEMINDER_VERSION=1.36.4
+
 RUN \
   echo "**** install build packages ****" && \
   apt-get update && \
@@ -34,7 +36,7 @@ RUN \
 
 RUN \
  echo "**** build zoneminder ****" && \
- git clone --depth 1 https://github.com/ZoneMinder/ZoneMinder -b 1.36.4 /tmp/zoneminder && \
+ git clone --depth 1 https://github.com/ZoneMinder/ZoneMinder -b ${ZONEMINDER_VERSION} /tmp/zoneminder && \
  cd /tmp/zoneminder && \
  git submodule update --init --recursive
 
