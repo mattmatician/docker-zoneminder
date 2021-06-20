@@ -4,6 +4,10 @@
 PHP_TZ=${TZ:-Etc/UTC}
 sed -i "s#^[; \t]*date\.timezone.*\$#date\.timezone = ${PHP_TZ}#g" /etc/php/7.4/apache2/php.ini
 
+# system timezone
+ln -sf /usr/share/zoneinfo/${TZ:-Etc/UTC} /etc/localtime
+dpkg-reconfigure -f noninteractive tzdata
+
 # cleanup stale pid and sock files
 [[ -e /var/run/zoneminder/zmdc.sock || -e /var/run/zoneminder/zm.pid ]] && \
 	rm -rf /var/run/zoneminder/*
