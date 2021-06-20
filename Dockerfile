@@ -65,7 +65,7 @@ FROM ghcr.io/linuxserver/baseimage-ubuntu:focal
 # set version label
 ARG BUILD_DATE
 ARG VERSION
-LABEL build_version="Mattmatician version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+LABEL build_version="mattmatician version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="mattmatician"
 
 # environment variables
@@ -128,6 +128,10 @@ RUN \
 RUN \
   ln -sf ../../../fonts /usr/share/zoneminder/www/skins/classic/css && \
   ln -sf ../../../skins /usr/share/zoneminder/www/skins/classic/css
+
+# add abc user to video group
+RUN \
+  usermod -aG video abc
 
 # ports and volumes
 EXPOSE 80
