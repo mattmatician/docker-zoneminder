@@ -1,5 +1,6 @@
 #!/usr/bin/with-contenv bash
 
+# If Config table doesn't exist, the database needs initialisation
 if ! mysql -s \
   -h "${ZM_DB_HOST:-db}" \
   -u "${ZM_DB_USER:-zmuser}" \

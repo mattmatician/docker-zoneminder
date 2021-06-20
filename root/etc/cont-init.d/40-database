@@ -1,5 +1,6 @@
 #!/usr/bin/with-contenv bash
 
+# Configure zm to use defined db connection
 printf '%s\n%s\n%s\n%s\n' \
   "ZM_DB_HOST=${ZM_DB_HOST:-db}" \
   "ZM_DB_NAME=${ZM_DB_NAME:-zm}" \
@@ -7,6 +8,7 @@ printf '%s\n%s\n%s\n%s\n' \
   "ZM_DB_PASS=${ZM_DB_PASSWORD:-zmpass}" \
   > /config/zm/conf.d/03-docker-mysql.conf
 
+# Ensure db is online (timeout 120 seconds)
 COUNTER=0
 while ! mysqladmin ping -h"${ZM_DB_HOST:-db}" --silent ; do
   echo "trying to connect to ${ZM_DB_HOST:-db}..."
