@@ -11,7 +11,7 @@ Compatible with docker-compose v2 schemas.
 ```yaml
 ---
 services:
-  mysql:
+  db:
     environment:
       MYSQL_DATABASE: zm
       MYSQL_PASSWORD: zmpass
@@ -23,7 +23,13 @@ services:
     volumes:
     - mysql_data:/var/lib/mysql:rw
   zoneminder:
+    depends_on:
+    - db
     environment:
+      ZM_DB_HOST: db
+      ZM_DB_NAME: zm
+      ZM_DB_PASSWORD: zmpass
+      ZM_DB_USER: zmuser
       TZ: Europe/London
     image: mattmatician/zoneminder:latest
     ports:

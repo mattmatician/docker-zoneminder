@@ -1,4 +1,16 @@
 #!/usr/bin/with-contenv bash
 
-# check and update db if required
-/usr/bin/zmupdate.pl -nointeractive
+printf '%s\n%s\n%s\n%s\n' \
+  "ZM_DB_HOST=${ZM_DB_HOST:-db}" \
+  "ZM_DB_NAME=${ZM_DB_NAME:-zm}" \
+  "ZM_DB_USER=${ZM_DB_USER:-zmuser}" \
+  "ZM_DB_PASS=${ZM_DB_PASSWORD:-zmpass}" \
+  > /config/zm/conf.d/03-docker-mysql.conf
+
+COUNTER=0
+while ! mysqladmin ping -h"${ZM_DB_HOST:-db}" --silent ; do
+  echo "trying to connect to ${ZM_DB_HOST:-db}..."
+  sleep 1
+  (( COUNTER++ ))
+  if [[ ${COUNTER} -gt 120 ]]; then exit 1; fi
+done

@@ -1,0 +1,20 @@
+#!/usr/bin/with-contenv bash
+
+if ! mysql -s \
+  -h "${ZM_DB_HOST:-db}" \
+  -u "${ZM_DB_USER:-zmuser}" \
+  -p"${ZM_DB_PASSWORD:-zmpass}" \
+  -e "SHOW TABLES LIKE 'Config';" \
+  "${ZM_DB_NAME:-zm}" > /dev/null 2>&1
+then
+  # database needs to be initialised (first time start-up)
+  mysql \
+    -h "${ZM_DB_HOST:-db}" \
+    -u "${ZM_DB_USER:-zmuser}" \
+    -p"${ZM_DB_PASSWORD:-zmpass}" \
+    "${ZM_DB_NAME:-zm}" \
+    < /usr/share/zoneminder/db/zm_create.sql
+fi
+
+# check and update db if required
+/usr/bin/zmupdate.pl --freshen
