@@ -1,0 +1,28 @@
+services:
+  mysql:
+    environment:
+      MYSQL_DATABASE: zm
+      MYSQL_PASSWORD: zmpass
+      MYSQL_ROOT_PASSWORD: somezoneminder
+      MYSQL_USER: zmuser
+      TZ: Europe/London
+    image: mysql:5.7.34
+    restart: unless-stopped
+    volumes:
+    - mysql_data:/var/lib/mysql:rw
+  zoneminder:
+    build:
+      context: .
+    depends_on:
+    - mysql
+    environment:
+      TZ: Europe/London
+    ports:
+    - published: 80
+      target: 80
+    restart: unless-stopped
+    shm_size: 4g
+version: '3.3'
+volumes:
+  mysql_data: {}
+
