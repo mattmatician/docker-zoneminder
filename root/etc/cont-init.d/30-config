@@ -2,7 +2,7 @@
 
 # set php timezone
 PHP_TZ=${TZ:-Etc/UTC}
-sed -i "s#^[; \t]*date\.timezone.*$#date\.timezone = ${PHP_TZ}#g" /etc/php/7.4/apache2/php.ini
+sed -i "s#^[; \t]*date\.timezone.*\$#date\.timezone = ${PHP_TZ}#g" /etc/php/7.4/apache2/php.ini
 
 # cleanup stale pid and sock files
 [[ -e /var/run/zoneminder/zmdc.sock || -e /var/run/zoneminder/zm.pid ]] && \
