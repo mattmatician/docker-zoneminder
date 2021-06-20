@@ -3,5 +3,5 @@
 eval /usr/bin/zmpkg.pl start
 
 exec \
-	s6-setuidgid abc tail -F -q --pid="$(cat /var/run/zoneminder/zm.pid)" \
-	"$(find /var/log/apache2/error.log -printf '%C@ %p\n' |sort | head -n 2)"
+	s6-setuidgid abc tail -F -q --pid="$(cat /var/run/zm/zm.pid)" \
+	/data/log/zmdc.log
